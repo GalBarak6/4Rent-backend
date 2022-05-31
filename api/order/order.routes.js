@@ -1,6 +1,6 @@
 const express = require('express')
 // const { requireAuth, requireAdmin } = require('../../middlewares/requireAuth.middleware')
-// const {getOrders, getOrder, deleteOrder, updateOrder} = require('./user.controller')
+const {getOrders, updateOrder, getOrderById, addOrder } = require('./order.controller')
 const router = express.Router()
 
 // middleware that is specific to this router
