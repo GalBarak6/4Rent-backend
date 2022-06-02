@@ -4,11 +4,15 @@ const ObjectId = require('mongodb').ObjectId
 
 async function query(filterBy) {
     try {
-        // const criteria = _buildCriteria(filterBy)
-        const criteria = {}
+        const criteria = _buildCriteria(filterBy)
+
+        // const criteria = {}
 
         const collection = await dbService.getCollection('stay')
         var stays = await collection.find(criteria).toArray()
+        // var stays = await collection.find({"reviewScores.rating": 5.0}).toArray()
+
+        console.log({ stays })
         return stays
     } catch (err) {
         logger.error('cannot find stays', err)
@@ -61,29 +65,50 @@ async function update(stay) {
     }
 }
 
-// function _buildCriteria(filterBy) {
-//     logger.info('_buildCriteria', { filterBy })
-//     let isInStock
-//     let criteria = {}
+function _buildCriteria(filterBy) {
+    logger.info('_buildCriteria', { filterBy })
+    let criteria = {}
 
-//     if (filterBy.inStock === '' && filterBy.name !=='') {
-//         criteria = {
-//             name: filterBy.name ,
-//         }
-//     }else{
-//         isInStock = (filterBy.inStock === "1") ? true : false
-//         logger.info({ isInStock })
-//         criteria = {
-//             name: filterBy.name,
-//             inStock: isInStock
-//         }
-//     }
+    if (filterBy.label !== '') {
+        criteria = { ...criteria, labels: filterBy.label }
+    }
 
-//     logger.info('_buildCriteria', { criteria })
+    if (filterBy.type !== '') {
+        criteria = { ...criteria, type: filterBy.type }
+    }
+    
+    // if (filterBy.amenities !== '') {
+    //     console.log({amenities})
 
-//     return criteria
+    //     filterBy.amenities.forEach(amenity => {
+    //         criteria = { ...criteria, amenities: amenity }
+    //     })
+    //     // db.getCollection("stay").find({"amenities": "Pool"})
+    // }
 
-// }
+    if (filterBy.price !== '') {
+        criteria = {
+            $or: [{ price: { $eq: +filterBy.price } }, { price: { $gt: +filterBy.price } }]
+
+            // db.getCollection("stay").find({
+            //     $or:[ {price: {$eq: 1000}}, {price: {$gt: 1000}} ] 
+            //    })
+        }
+    }
+
+    if (filterBy.rating !== '') {
+        criteria = {
+            "reviewScores.rating": +filterBy.rating
+            // "reviewScores.rating": 5.0
+            // db.getCollection("stay").find({"reviewScores.rating": 5.0})
+        }
+    }
+
+    logger.info('_buildCriteria', { criteria })
+
+    return criteria
+
+}
 
 module.exports = {
     remove,
