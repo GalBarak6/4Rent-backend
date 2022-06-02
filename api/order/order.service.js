@@ -41,8 +41,8 @@ async function remove(orderId) {
 async function add(order) {
     try {
         const collection = await dbService.getCollection('order')
-        const addedOrder = await collection.insertOne(order)
-        return addedOrder
+        await collection.insertOne(order)
+        return order
     } catch (err) {
         logger.error('cannot insert order', err)
         throw err
