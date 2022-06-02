@@ -45,13 +45,14 @@ async function remove(stayId) {
 async function add(stay) {
     try {
         const collection = await dbService.getCollection('stay')
-        const addedStay = await collection.insertOne(stay)
-        return addedStay
+        await collection.insertOne(stay)
+        return stay
     } catch (err) {
         logger.error('cannot insert stay', err)
         throw err
     }
 }
+
 async function update(stay) {
     try {
         var id = ObjectId(stay._id)
@@ -64,6 +65,7 @@ async function update(stay) {
         throw err
     }
 }
+
 
 function _buildCriteria(filterBy) {
     logger.info('_buildCriteria', { filterBy })
