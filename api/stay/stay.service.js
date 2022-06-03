@@ -78,7 +78,7 @@ function _buildCriteria(filterBy) {
     if (filterBy.type !== '') {
         criteria = { ...criteria, type: filterBy.type }
     }
-    
+
     // if (filterBy.amenities !== '') {
     //     console.log({amenities})
 
@@ -106,16 +106,23 @@ function _buildCriteria(filterBy) {
         }
     }
 
-    logger.info('_buildCriteria', { criteria })
+    if (filterBy.city !== '') {
 
-    return criteria
+        criteria = {
+            "loc.city": filterBy.city
+        }
+    }
 
-}
+        logger.info('_buildCriteria', { criteria })
 
-module.exports = {
-    remove,
-    query,
-    getById,
-    add,
-    update,
-}
+        return criteria
+
+    }
+
+    module.exports = {
+        remove,
+        query,
+        getById,
+        add,
+        update,
+    }
