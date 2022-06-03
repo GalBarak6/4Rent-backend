@@ -106,6 +106,12 @@ function _buildCriteria(filterBy) {
         }
     }
 
+    if(filterBy.host !== '') {
+        criteria = {
+            "host.fullname": filterBy.host
+        }
+    }
+
     logger.info('_buildCriteria', { criteria })
 
     return criteria
