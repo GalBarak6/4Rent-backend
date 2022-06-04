@@ -108,7 +108,7 @@ function _buildCriteria(filterBy) {
 
     if(filterBy.host !== '') {
         criteria = {
-            "host.fullname": filterBy.host
+            "host._id": filterBy.host
         }
     }
 
