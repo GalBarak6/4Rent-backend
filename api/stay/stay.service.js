@@ -79,15 +79,6 @@ function _buildCriteria(filterBy) {
         criteria = { ...criteria, type: filterBy.type }
     }
 
-    // if (filterBy.amenities !== '') {
-    //     console.log({amenities})
-
-    //     filterBy.amenities.forEach(amenity => {
-    //         criteria = { ...criteria, amenities: amenity }
-    //     })
-    //     // db.getCollection("stay").find({"amenities": "Pool"})
-    // }
-
     if (filterBy.price !== '') {
         criteria = {
             $or: [{ price: { $eq: +filterBy.price } }, { price: { $gt: +filterBy.price } }]
@@ -97,12 +88,15 @@ function _buildCriteria(filterBy) {
             //    })
         }
     }
+    if (filterBy.capacity !== '') {
+        criteria = {
+            $or: [{ capacity: { $eq: +filterBy.capacity } }, { capacity: { $gt: +filterBy.capacity } }]
+        }
+    }
 
     if (filterBy.rating !== '') {
-        criteria = {
+        criteria = {...criteria,
             "reviewScores.rating": +filterBy.rating
-            // "reviewScores.rating": 5.0
-            // db.getCollection("stay").find({"reviewScores.rating": 5.0})
         }
     }
 
@@ -113,7 +107,6 @@ function _buildCriteria(filterBy) {
     }
 
     if (filterBy.city !== '') {
-
         criteria = {
             "loc.city": filterBy.city
         }
