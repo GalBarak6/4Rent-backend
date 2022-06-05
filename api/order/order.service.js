@@ -67,9 +67,15 @@ function _buildCriteria(filterBy) {
 
     let criteria = {}
 
-    if (filterBy.host !== '') {
+    if (filterBy.host !== '' && filterBy.host !==  "undefined") {
         criteria = {
             "host._id": filterBy.host
+        }
+    }
+
+    if (filterBy.booker !== '' && filterBy.booker !==  "undefined") {
+        criteria = {
+            "booker._id": filterBy.booker
         }
     }
 

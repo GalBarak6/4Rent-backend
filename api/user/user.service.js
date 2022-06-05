@@ -9,7 +9,7 @@ module.exports = {
     getById,
     getByUsername,
     remove,
-    // update,
+    update,
     add
 }
 
@@ -71,22 +71,24 @@ async function remove(userId) {
     }
 }
 
-// async function update(user) {
-//     try {
-//         // peek only updatable properties
-//         const userToSave = {
-//             _id: ObjectId(user._id), // needed for the returnd obj
-//             fullname: user.fullname,
-//             isHost: user.isHost
-//         }
-//         const collection = await dbService.getCollection('user')
-//         await collection.updateOne({ _id: userToSave._id }, { $set: userToSave })
-//         return userToSave
-//     } catch (err) {
-//         logger.error(`cannot update user ${user._id}`, err)
-//         throw err
-//     }
-// }
+async function update(user) {
+    try {
+        // peek only updatable properties
+        const userToSave = {
+            _id: ObjectId(user._id), // needed for the returnd obj
+            fullname: user.fullname,
+            isHost: user.isHost,
+            imgUrl: user.imgUrl,
+            wishlist: user.wishlist
+        }
+        const collection = await dbService.getCollection('user')
+        await collection.updateOne({ _id: userToSave._id }, { $set: userToSave })
+        return userToSave
+    } catch (err) {
+        logger.error(`cannot update user ${user._id}`, err)
+        throw err
+    }
+}
 
 async function add(user) {
     try {
@@ -96,6 +98,8 @@ async function add(user) {
             password: user.password,
             fullname: user.fullname,
             imgUrl: user.imgUrl,
+            isHost: false,
+            wishlist: []
         }
         const collection = await dbService.getCollection('user')
         await collection.insertOne(userToAdd)
