@@ -4,8 +4,9 @@ const ObjectId = require('mongodb').ObjectId
 
 async function query(filterBy) {
     try {
-        // const criteria = _buildCriteria(filterBy)
-        const criteria = {}
+        const criteria = _buildCriteria(filterBy)
+
+        // const criteria = {}
 
         const collection = await dbService.getCollection('order')
         var orders = await collection.find(criteria).toArray()
@@ -61,29 +62,22 @@ async function update(order) {
     }
 }
 
-// function _buildCriteria(filterBy) {
-//     logger.info('_buildCriteria', { filterBy })
-//     let isInStock
-//     let criteria = {}
+function _buildCriteria(filterBy) {
+    logger.info('_buildCriteria', { filterBy })
 
-//     if (filterBy.inStock === '' && filterBy.name !=='') {
-//         criteria = {
-//             name: filterBy.name ,
-//         }
-//     }else{
-//         isInStock = (filterBy.inStock === "1") ? true : false
-//         logger.info({ isInStock })
-//         criteria = {
-//             name: filterBy.name,
-//             inStock: isInStock
-//         }
-//     }
+    let criteria = {}
 
-//     logger.info('_buildCriteria', { criteria })
+    if (filterBy.host !== '') {
+        criteria = {
+            "host._id": filterBy.host
+        }
+    }
 
-//     return criteria
+    logger.info('_buildCriteria', { criteria })
 
-// }
+    return criteria
+
+}
 
 module.exports = {
     remove,
