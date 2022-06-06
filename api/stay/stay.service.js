@@ -2,17 +2,20 @@ const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
 const ObjectId = require('mongodb').ObjectId
 
+const PAGE_SIZE = 4
+
 async function query(filterBy) {
     try {
         const criteria = _buildCriteria(filterBy)
-
         // const criteria = {}
+
+        const startIdx = +filterBy.pageIdx * PAGE_SIZE || 0
 
         const collection = await dbService.getCollection('stay')
         var stays = await collection.find(criteria).toArray()
         // var stays = await collection.find({"reviewScores.rating": 5.0}).toArray()
-
-        console.log({ stays })
+        // const newStays = stays.slice(startIdx, startIdx + PAGE_SIZE)
+        // return newStays
         return stays
     } catch (err) {
         logger.error('cannot find stays', err)
