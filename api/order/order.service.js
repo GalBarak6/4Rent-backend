@@ -2,15 +2,20 @@ const dbService = require('../../services/db.service')
 const logger = require('../../services/logger.service')
 const ObjectId = require('mongodb').ObjectId
 
+const PAGE_SIZE = 4
+
 async function query(filterBy) {
     try {
         const criteria = _buildCriteria(filterBy)
-
         // const criteria = {}
+
+        const startIdx = +filterBy.orderPageIdx * PAGE_SIZE || 0
 
         const collection = await dbService.getCollection('order')
         var orders = await collection.find(criteria).toArray()
-        return orders
+        const newOrders = orders.slice(startIdx, startIdx + PAGE_SIZE)
+        return newOrders
+        // return orders
     } catch (err) {
         logger.error('cannot find orders', err)
         throw err
@@ -67,13 +72,13 @@ function _buildCriteria(filterBy) {
 
     let criteria = {}
 
-    if (filterBy.host !== '' && filterBy.host !==  "undefined") {
+    if (filterBy.host !== '' && filterBy.host !== "undefined") {
         criteria = {
             "host._id": filterBy.host
         }
     }
 
-    if (filterBy.booker !== '' && filterBy.booker !==  "undefined") {
+    if (filterBy.booker !== '' && filterBy.booker !== "undefined") {
         criteria = {
             "booker._id": filterBy.booker
         }
