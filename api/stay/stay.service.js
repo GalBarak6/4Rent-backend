@@ -89,7 +89,7 @@ function _buildCriteria(filterBy) {
         }
     }
     if (filterBy.capacity !== '') {
-        criteria = {
+        criteria = {...criteria,
             $or: [{ capacity: { $eq: +filterBy.capacity } }, { capacity: { $gt: +filterBy.capacity } }]
         }
     }
@@ -107,8 +107,11 @@ function _buildCriteria(filterBy) {
     }
 
     if (filterBy.city !== '') {
-        criteria = {
-            "loc.city": filterBy.city
+        var regex = new RegExp(["^", filterBy.city, "$"].join(""), "i");
+
+
+        criteria = {...criteria,
+            "loc.city": regex
         }
     }
 
