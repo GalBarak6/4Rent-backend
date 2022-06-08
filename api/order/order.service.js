@@ -9,13 +9,15 @@ async function query(filterBy) {
         const criteria = _buildCriteria(filterBy)
         // const criteria = {}
 
-        const startIdx = +filterBy.orderPageIdx * PAGE_SIZE || 0
+        const startIdx = +filterBy.orderPageIdx * PAGE_SIZE
 
         const collection = await dbService.getCollection('order')
         var orders = await collection.find(criteria).toArray()
-        const newOrders = orders.slice(startIdx, startIdx + PAGE_SIZE)
-        return newOrders
-        // return orders
+        if (filterBy.orderPageIdx || filterBy.orderPageIdx === "0") {
+            const newOrders = orders.slice(startIdx, startIdx + PAGE_SIZE)
+            return newOrders
+        }
+        return orders
     } catch (err) {
         logger.error('cannot find orders', err)
         throw err
